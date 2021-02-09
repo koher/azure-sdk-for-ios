@@ -16,9 +16,9 @@ import AzureCommunicationSignaling
 struct Constants {
     static let endpoint =  "https://chat-sdktester-e2e.int.communication.azure.net/"
     static let id1 = "8:acs:46849534-eb08-4ab7-bde7-c36928cd1547_00000006-f3dd-7f8c-1655-373a0d000426"
-    static let skypeToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjEwMl9pbnQiLCJ4NXQiOiJnMTROVjRoSzJKUklPYk15YUUyOUxFU1FKRk0iLCJ0eXAiOiJKV1QifQ.eyJza3lwZWlkIjoiYWNzOjQ2ODQ5NTM0LWViMDgtNGFiNy1iZGU3LWMzNjkyOGNkMTU0N18wMDAwMDAwNi1mM2RkLTdmOGMtMTY1NS0zNzNhMGQwMDA0MjYiLCJzY3AiOjE3OTIsImNzaSI6IjE2MTIxNjAwMjQiLCJpYXQiOjE2MTIxNjAwMjQsImV4cCI6MTYxMjI0NjQyNCwiYWNzU2NvcGUiOiJjaGF0IiwicmVzb3VyY2VJZCI6IjQ2ODQ5NTM0LWViMDgtNGFiNy1iZGU3LWMzNjkyOGNkMTU0NyJ9.RhX5bEuS3ZaK1ELc5B8TjjMld4aa9_8eFkpzKYnFthvZYNSGtwccWHEh4N2Ix05QWserwrFvigxQYEtNl-KcEQln3T1uJg3lunvV7OUzgtJYCDKjMOFIptp9VHm2amO9Z93KcAhZ-4u-5FmH3Q33EozfJ0nzTLbbuuyDsXn4w2dsypJmkHjGAqt_YHFX2MWmNaIUp4nZbHWCnKDU4A1eG6umDJNY87lqSHFjlDFG0IxOQUoLarT_t8R1275WGkIyCMNdrRrWszD8T_dKu4NnGIWgNA0s7hm0UBRA4oVZz8wg3rPCJnlE53Wx1eEjktFqy0zV5Qqyuo_FjKr7RhLAbQ"
+    static let skypeToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjEwMl9pbnQiLCJ4NXQiOiJnMTROVjRoSzJKUklPYk15YUUyOUxFU1FKRk0iLCJ0eXAiOiJKV1QifQ.eyJza3lwZWlkIjoiYWNzOjQ2ODQ5NTM0LWViMDgtNGFiNy1iZGU3LWMzNjkyOGNkMTU0N18wMDAwMDAwNi1mM2RkLTdmOGMtMTY1NS0zNzNhMGQwMDA0MjYiLCJzY3AiOjE3OTIsImNzaSI6IjE2MTI4NDQ1NzYiLCJpYXQiOjE2MTI4NDQ1NzYsImV4cCI6MTYxMjkzMDk3NiwiYWNzU2NvcGUiOiJjaGF0IiwicmVzb3VyY2VJZCI6IjQ2ODQ5NTM0LWViMDgtNGFiNy1iZGU3LWMzNjkyOGNkMTU0NyJ9.Ku6P0sbIyfuUnDS9wc9JN_Jgm5_NqBF1RhrOaI0Ms3hOH__iW9HCHFQT78wY6sxhLj9g8u3-Flxcxet81HqnP1z5NN9NUSsgsLq_BaZGZapGplEfp6WlgqLqZXQ04-ZaeaS-0FC1o1ZBZsJljY9rveQ6x5Pd1SAsHzfPgG-PNv_1POeihIYwfSoAOLZG4PdJk1D6di2aFfvYNQwxVUDrtsq2x9EGTG6owpE4kpfibGKNVaoK56LQb9Fdhl54VnVewYbJE-cPqa6O5mIkJvGkA29uLSA4qVoJLl9yrDxAqv1f63jKs4ltLkyxw7ID6NJwuY_Cn12xBzgUfHM7OyzqEQ"
     static let id2 = "8:acs:46849534-eb08-4ab7-bde7-c36928cd1547_00000007-fc40-73d6-b0b7-3a3a0d002613"
-    static let skypeToken2 = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjEwMl9pbnQiLCJ4NXQiOiJnMTROVjRoSzJKUklPYk15YUUyOUxFU1FKRk0iLCJ0eXAiOiJKV1QifQ.eyJza3lwZWlkIjoiYWNzOjQ2ODQ5NTM0LWViMDgtNGFiNy1iZGU3LWMzNjkyOGNkMTU0N18wMDAwMDAwNy1mYzQwLTczZDYtYjBiNy0zYTNhMGQwMDI2MTMiLCJzY3AiOjE3OTIsImNzaSI6IjE2MTIxNjI0NjYiLCJpYXQiOjE2MTIxNjI0NjYsImV4cCI6MTYxMjI0ODg2NiwiYWNzU2NvcGUiOiJjaGF0IiwicmVzb3VyY2VJZCI6IjQ2ODQ5NTM0LWViMDgtNGFiNy1iZGU3LWMzNjkyOGNkMTU0NyJ9.g-ISDA6e8boo1wxg_7zMUfBcOXNm3EmRROV-XJSmLmWzVqcRVmSYVmq5OU89AUNFoRnRSmuVCUKdMu3JLphvMNOHT6KwR0oBx93DzOqCoskwcVTle5BRiZMZZ6_7Ldhr5pAEEKojyPvwNak3k2rPRsykuqcTZW0i91yrzN0YsM4AQnimIXhlUIouMWltGux5Pv0aagmLCa-A4MYWW-PkBUhxtd39rP-yRAUmOocMypnuchG3jiLBn1tVg0Y4FvB43DkvRGAM5sSaIGwDmkjNwyvl0jL3O7L-ZPt-VRy82J-7SQq8THAgNY98XGbU-AGAH3zIjcGSjhELeRliv9J8IA"
+    static let skypeToken2 = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjEwMl9pbnQiLCJ4NXQiOiJnMTROVjRoSzJKUklPYk15YUUyOUxFU1FKRk0iLCJ0eXAiOiJKV1QifQ.eyJza3lwZWlkIjoiYWNzOjQ2ODQ5NTM0LWViMDgtNGFiNy1iZGU3LWMzNjkyOGNkMTU0N18wMDAwMDAwNy1mYzQwLTczZDYtYjBiNy0zYTNhMGQwMDI2MTMiLCJzY3AiOjE3OTIsImNzaSI6IjE2MTI4NDQ1OTUiLCJpYXQiOjE2MTI4NDQ1OTUsImV4cCI6MTYxMjkzMDk5NSwiYWNzU2NvcGUiOiJjaGF0IiwicmVzb3VyY2VJZCI6IjQ2ODQ5NTM0LWViMDgtNGFiNy1iZGU3LWMzNjkyOGNkMTU0NyJ9.UkqPKmMOfsnvtUlhBblaTRoCVQgyLGCr5YDlYnr0r2NUeOhOss80jbNhg4b_vAeAjGgl0b1Q5V4LPYrfTtfqNxiIfbJ694DIY7R346EDejsIu94yhqRp0LCqsnr6EvTti74a2fpxztMadVPqa4p12m86Yf2iw6Fyi7UrPjNDdd_Z3vJF_SnrvJaV7xLAMa4zA7rcJKl_R2L8HF69Ff5lxPbcAFf-7PVgq46NUtRBPx3dai2woH2LqtK2wQAYvDvBEyeE1LrndTTkcQWSiw0OU4Utz8EEK6oPTcc6EBOovyfSl2EvR62-EJzfsFA9GlZnvbNiduA5yG0MLLDDSHlVBQ"
     
 }
 
@@ -154,17 +154,17 @@ extension ViewController: MyTableViewCellDelegate {
                 self.logArea.scrollRangeToVisible(range)
             }
         case "Create Thread":
-            let participant = ChatParticipant(
+            let participant = Participant(from: ChatParticipant(
                 id: Constants.id1,
                 displayName: "Bob",
-                shareHistoryTime: Iso8601Date(string: "2020-10-30T10:50:50Z")!
+                                            shareHistoryTime: Iso8601Date(string: "2020-10-30T10:50:50Z"))
             )
-            let participant2 = ChatParticipant(
+            let participant2 = Participant(from: ChatParticipant(
                 id: Constants.id2,
                 displayName: "Alice",
-                shareHistoryTime: Iso8601Date(string: "2020-10-30T10:50:50Z")!
+                                            shareHistoryTime: Iso8601Date(string: "2020-10-30T10:50:50Z"))
             )
-            let request = CreateChatThreadRequest(
+            let request = CreateThreadRequest(
                 topic: "Lunch Thread",
                 participants: [
                     participant,participant2
@@ -179,7 +179,7 @@ extension ViewController: MyTableViewCellDelegate {
                         let range = NSRange(location: self.logArea.text.count - 1, length: 0)
                         self.logArea.scrollRangeToVisible(range)
                     }
-                    guard let thread = response.chatThread else {
+                    guard let thread = response.thread else {
                         print("Failed to extract chatThread from response")
                         return
                     }
@@ -336,10 +336,10 @@ extension ViewController: MyTableViewCellDelegate {
                 showErrorWindow(with: "You need to creat a thread before you can add a participant")
                 return
             }
-            let participant = ChatParticipant(
+            let participant = Participant(from: ChatParticipant(
                 id: generateId(),
                 displayName: "William",
-                shareHistoryTime: Iso8601Date(string: "2020-10-30T10:50:50Z")!
+                shareHistoryTime: Iso8601Date(string: "2020-10-30T10:50:50Z"))
             )
             chatThreadClient?.add(participants: [participant], completionHandler: { result, _ in
                 switch result {
@@ -370,12 +370,12 @@ extension ViewController: MyTableViewCellDelegate {
                         response.nextItem { result in
                             switch result {
                             case let .success(participant):
-                                if participant.id == Constants.id1 || participant.id == Constants.id2
+                                if participant.user.identifier == Constants.id1 || participant.user.identifier == Constants.id2
                                 {
                                     return
                                 }
                                 existLoop = true
-                                self.chatThreadClient?.remove(participant: participant.id, completionHandler: { result, _ in
+                                self.chatThreadClient?.remove(participant: participant.user.identifier, completionHandler: { result, _ in
                                     switch result {
                                     case let .success(response):
                                         print(response)
