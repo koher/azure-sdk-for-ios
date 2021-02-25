@@ -2,102 +2,298 @@ parameters:
   BuildScheme: sdk # Build all SDK projects by default
 
 jobs:
-  - job: 'XcodeBuild'
+  # - job: 'XcodeBuild'
 
-    variables:
-      - template: ../variables/globals.yml
+  #   variables:
+  #     - template: ../variables/globals.yml
 
-    pool:
-      vmImage: '$(OSVmImage)'
+  #   pool:
+  #     vmImage: '$(OSVmImage)'
 
-    steps:
-      - script: |
-          echo "##vso[build.addbuildtag]Scheduled"
-        displayName: 'Tag scheduled builds'
-        condition: and(succeeded(), eq(variables['Build.SourceBranchName'],'master'),eq(variables['Build.Reason'],'Schedule'))
+  #   steps:
+  #     - script: |
+  #         echo "##vso[build.addbuildtag]Scheduled"
+  #       displayName: 'Tag scheduled builds'
+  #       condition: and(succeeded(), eq(variables['Build.SourceBranchName'],'master'),eq(variables['Build.Reason'],'Schedule'))
 
-      - template: /eng/common/pipelines/templates/steps/daily-dev-build-variable.yml
+  #     - template: /eng/common/pipelines/templates/steps/daily-dev-build-variable.yml
 
-      - script: sudo xcode-select --switch /Applications/Xcode_$(XcodeVersion).app
-        displayName: 'Use Xcode $(XcodeVersion)'
+  #     - script: sudo xcode-select --switch /Applications/Xcode_$(XcodeVersion).app
+  #       displayName: 'Use Xcode $(XcodeVersion)'
 
-      - script: pod install
-        displayName: 'Install dependencies'
+  #     - script: pod install
+  #       displayName: 'Install dependencies'
 
-      - script: |
-          set -o pipefail
-          xcodebuild archive \
-                    -workspace AzureSDK.xcworkspace \
-                    -scheme ${{parameters.BuildScheme}} \
-                    -sdk iphonesimulator \
-                    -configuration Release \
-                    -archivePath $(Build.ArtifactStagingDirectory)/AzureSDK-iphonesimulator.xcarchive \
-                    SKIP_INSTALL=NO | xcpretty -c
-        displayName: 'Build and archive libraries for release [iphonesimulator]'
+  #     - script: |
+  #         set -o pipefail
+  #         xcodebuild archive \
+  #                   -workspace AzureSDK.xcworkspace \
+  #                   -scheme ${{parameters.BuildScheme}} \
+  #                   -sdk iphonesimulator \
+  #                   -configuration Release \
+  #                   -archivePath $(Build.ArtifactStagingDirectory)/AzureSDK-iphonesimulator.xcarchive \
+  #                   SKIP_INSTALL=NO | xcpretty -c
+  #       displayName: 'Build and archive libraries for release [iphonesimulator]'
 
-      - publish: $(Build.ArtifactStagingDirectory)/AzureSDK-iphonesimulator.xcarchive
-        displayName: 'Publish release archive [iphonesimulator]'
-        artifact: 'archive-release-iphonesimulator'
+  #     - publish: $(Build.ArtifactStagingDirectory)/AzureSDK-iphonesimulator.xcarchive
+  #       displayName: 'Publish release archive [iphonesimulator]'
+  #       artifact: 'archive-release-iphonesimulator'
 
-      - script: |
-          set -o pipefail
-          xcodebuild archive \
-                    -workspace AzureSDK.xcworkspace \
-                    -scheme ${{parameters.BuildScheme}} \
-                    -sdk iphoneos \
-                    -configuration Release \
-                    -archivePath $(Build.ArtifactStagingDirectory)/AzureSDK-iphoneos.xcarchive \
-                    SKIP_INSTALL=NO | xcpretty -c
-        displayName: 'Build and archive libraries for release [iphoneos]'
+  #     - script: |
+  #         set -o pipefail
+  #         xcodebuild archive \
+  #                   -workspace AzureSDK.xcworkspace \
+  #                   -scheme ${{parameters.BuildScheme}} \
+  #                   -sdk iphoneos \
+  #                   -configuration Release \
+  #                   -archivePath $(Build.ArtifactStagingDirectory)/AzureSDK-iphoneos.xcarchive \
+  #                   SKIP_INSTALL=NO | xcpretty -c
+  #       displayName: 'Build and archive libraries for release [iphoneos]'
 
-      - publish: $(Build.ArtifactStagingDirectory)/AzureSDK-iphoneos.xcarchive
-        displayName: 'Publish release archive [iphoneos]'
-        artifact: 'archive-release-iphoneos'
+  #     - publish: $(Build.ArtifactStagingDirectory)/AzureSDK-iphoneos.xcarchive
+  #       displayName: 'Publish release archive [iphoneos]'
+  #       artifact: 'archive-release-iphoneos'
 
-      - script: |
-          echo "Getting list of projects in scheme ${{parameters.BuildScheme}}"
-          xcodebuild -showBuildSettings \
-                    -workspace AzureSDK.xcworkspace \
-                    -scheme ${{parameters.BuildScheme}} \
-                    -configuration Release \
-          | grep PROJECT_FILE_PATH \
-          | awk -F ' = ' '{print $NF}' \
-          | while read PROJECT_PATH; do
-              PROJECT_NAME=$(echo $PROJECT_PATH | awk -F/ '{print $NF}' | sed 's/.xcodeproj//')
-              BCSYMBOLMAP_FILE=$(grep -l $PROJECT_NAME.build $(Build.ArtifactStagingDirectory)/AzureSDK-iphoneos.xcarchive/BCSymbolMaps/* | head -n1)
-              echo "Bundling xcframework for $PROJECT_NAME"
-              echo "Including BCSymbolMap at path $BCSYMBOLMAP_FILE"
-              xcodebuild -create-xcframework \
-                        -framework $(Build.ArtifactStagingDirectory)/AzureSDK-iphonesimulator.xcarchive/Products/Library/Frameworks/$PROJECT_NAME.framework \
-                          -debug-symbols $(Build.ArtifactStagingDirectory)/AzureSDK-iphonesimulator.xcarchive/dSYMs/$PROJECT_NAME.framework.dSYM \
-                        -framework $(Build.ArtifactStagingDirectory)/AzureSDK-iphoneos.xcarchive/Products/Library/Frameworks/$PROJECT_NAME.framework \
-                          -debug-symbols $(Build.ArtifactStagingDirectory)/AzureSDK-iphoneos.xcarchive/dSYMs/$PROJECT_NAME.framework.dSYM \
-                          -debug-symbols $BCSYMBOLMAP_FILE \
-                        -output $(Build.ArtifactStagingDirectory)/xcframeworks/$PROJECT_NAME.xcframework
-            done
-        displayName: 'Bundle release xcframeworks'
+  #     - script: |
+  #         echo "Getting list of projects in scheme ${{parameters.BuildScheme}}"
+  #         xcodebuild -showBuildSettings \
+  #                   -workspace AzureSDK.xcworkspace \
+  #                   -scheme ${{parameters.BuildScheme}} \
+  #                   -configuration Release \
+  #         | grep PROJECT_FILE_PATH \
+  #         | awk -F ' = ' '{print $NF}' \
+  #         | while read PROJECT_PATH; do
+  #             PROJECT_NAME=$(echo $PROJECT_PATH | awk -F/ '{print $NF}' | sed 's/.xcodeproj//')
+  #             BCSYMBOLMAP_FILE=$(grep -l $PROJECT_NAME.build $(Build.ArtifactStagingDirectory)/AzureSDK-iphoneos.xcarchive/BCSymbolMaps/* | head -n1)
+  #             echo "Bundling xcframework for $PROJECT_NAME"
+  #             echo "Including BCSymbolMap at path $BCSYMBOLMAP_FILE"
+  #             xcodebuild -create-xcframework \
+  #                       -framework $(Build.ArtifactStagingDirectory)/AzureSDK-iphonesimulator.xcarchive/Products/Library/Frameworks/$PROJECT_NAME.framework \
+  #                         -debug-symbols $(Build.ArtifactStagingDirectory)/AzureSDK-iphonesimulator.xcarchive/dSYMs/$PROJECT_NAME.framework.dSYM \
+  #                       -framework $(Build.ArtifactStagingDirectory)/AzureSDK-iphoneos.xcarchive/Products/Library/Frameworks/$PROJECT_NAME.framework \
+  #                         -debug-symbols $(Build.ArtifactStagingDirectory)/AzureSDK-iphoneos.xcarchive/dSYMs/$PROJECT_NAME.framework.dSYM \
+  #                         -debug-symbols $BCSYMBOLMAP_FILE \
+  #                       -output $(Build.ArtifactStagingDirectory)/xcframeworks/$PROJECT_NAME.xcframework
+  #           done
+  #       displayName: 'Bundle release xcframeworks'
 
-      - publish: $(Build.ArtifactStagingDirectory)/xcframeworks
-        displayName: 'Publish xcframeworks'
-        artifact: 'xcframeworks-release'
+  #     - publish: $(Build.ArtifactStagingDirectory)/xcframeworks
+  #       displayName: 'Publish xcframeworks'
+  #       artifact: 'xcframeworks-release'
 
-  - job: 'SwiftBuild'
+  # - job: 'SwiftBuild'
 
-    variables:
-      - template: ../variables/globals.yml
+  #   variables:
+  #     - template: ../variables/globals.yml
 
-    pool:
-      vmImage: '$(OSVmImage)'
+  #   pool:
+  #     vmImage: '$(OSVmImage)'
   
-    steps:
-      - script: sudo xcode-select --switch /Applications/Xcode_$(XcodeVersion).app
-        displayName: 'Use Xcode $(XcodeVersion)'
+  #   steps:
+  #     - script: sudo xcode-select --switch /Applications/Xcode_$(XcodeVersion).app
+  #       displayName: 'Use Xcode $(XcodeVersion)'
 
-      - script: swift build
-        displayName: 'Build libraries with swift build'
+  #     - script: swift build
+  #       displayName: 'Build libraries with swift build'
 
-  - job: 'Analyze'
-    condition: and(succeeded(), ne(variables['Skip.Analyze'], 'true'))
+  # - job: 'Analyze'
+  #   condition: and(succeeded(), ne(variables['Skip.Analyze'], 'true'))
+
+  #   variables:
+  #     - template: ../variables/globals.yml
+
+  #   pool:
+  #     vmImage: '$(OSVmImage)'
+
+  #   steps:
+
+  #     - task: UsePythonVersion@0
+  #       displayName: 'Use Python 3.6'
+  #       inputs:
+  #         versionSpec: '3.6'
+
+  #     - script: sudo xcode-select --switch /Applications/Xcode_$(XcodeVersion).app
+  #       displayName: 'Use Xcode $(XcodeVersion)'
+
+  #     - template: ../../../common/pipelines/templates/steps/verify-links.yml
+  #       parameters:
+  #         Directory: ""
+  #         CheckLinkGuidance: $true
+
+  #     - script: |
+  #         pod lib lint --quick
+  #         pod spec lint --use-modular-headers
+  #       displayName: Lint Podspecs
+
+  #     - template: /eng/pipelines/templates/steps/verify-versions.yml
+
+  #     - script: |
+  #         brew install swiftlint
+  #         case "${{parameters.BuildScheme}}" in
+  #           all)
+  #             swiftlint lint --path . --quiet --reporter emoji
+  #             ;;
+  #           sdk|examples)
+  #             swiftlint lint --path ${{parameters.BuildScheme}} --quiet --reporter emoji
+  #             ;;
+  #           *)
+  #             swiftlint lint --path sdk/${{parameters.BuildScheme}} --quiet --reporter emoji
+  #             ;;
+  #         esac
+  #       displayName: 'Swiftlint sources'
+
+  #     - script: |
+  #         pip install setuptools wheel
+  #         pip install doc-warden==$(DocWardenVersion)
+  #         ward scan -d $(Build.SourcesDirectory) -c $(Build.SourcesDirectory)/eng/.docsettings.yml
+  #       displayName: 'Verify READMEs'
+
+  #     - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+  #       # ComponentGovernance is currently unable to run on pull requests of public projects. Running on non-PR
+  #       # builds should be sufficient.
+  #       condition: and(succeededOrFailed(), ne(variables['Build.Reason'], 'PullRequest'))
+  #       displayName: 'Component detection'
+
+  # - job: 'UnitTest'
+
+  #   variables:
+  #     - template: ../variables/globals.yml
+
+  #   pool:
+  #     vmImage: '$(OSVmImage)'
+
+  #   steps:
+  #     - script: sudo xcode-select --switch /Applications/Xcode_$(XcodeVersion).app
+  #       displayName: 'Use Xcode $(XcodeVersion)'
+
+  #     - script: gem install -N trainer slather -- --use-system-libraries
+  #       displayName: 'Install build tools'
+
+  #     - script: pod install
+  #       displayName: 'Install dependencies'
+
+  #     - script: |
+  #         xcrun simctl delete unavailable
+  #         set -o pipefail
+  #         xcodebuild -workspace AzureSDK.xcworkspace \
+  #                   -scheme ${{parameters.BuildScheme}} \
+  #                   -destination "platform=iOS Simulator,OS=$(SimulatorVersion),name=$(SimulatorDevice)" \
+  #                   -configuration Debug \
+  #                   -derivedDataPath $(Build.ArtifactStagingDirectory) \
+  #                   -enableCodeCoverage YES \
+  #                   test | xcpretty -c
+  #       displayName: 'Build and test libraries'
+
+  #     - script: trainer --path $(Build.ArtifactStagingDirectory) --fail_build false
+  #       env:
+  #         FASTLANE_OPT_OUT_USAGE: true
+  #       displayName: 'Convert unit test results'
+
+  #     - task: PublishTestResults@2
+  #       inputs:
+  #         searchFolder: '$(Build.ArtifactStagingDirectory)/Logs/Test'
+  #         testResultsFiles: '*.xml'
+  #         testRunTitle: 'Unit Tests - [Xcode $(XcodeVersion), iOS $(SimulatorVersion)]'
+  #       displayName: 'Publish unit test results'
+
+  #     - script: |
+  #         echo "Getting list of projects in scheme ${{parameters.BuildScheme}}"
+  #         xcodebuild -showBuildSettings \
+  #                   -workspace AzureSDK.xcworkspace \
+  #                   -scheme ${{parameters.BuildScheme}} \
+  #                   -configuration Debug \
+  #         | grep PROJECT_FILE_PATH \
+  #         | awk -F ' = ' '{print $NF}' \
+  #         | while read PROJECT_PATH; do
+  #             PROJECT_NAME=$(echo $PROJECT_PATH | awk -F/ '{print $NF}' | sed 's/.xcodeproj//')
+  #             echo "Generating reports for $PROJECT_NAME"
+  #             slather coverage -x \
+  #                             --workspace AzureSDK.xcworkspace \
+  #                             --scheme ${{parameters.BuildScheme}} \
+  #                             --configuration Debug \
+  #                             --binary-basename $PROJECT_NAME \
+  #                             --build-directory $(Build.ArtifactStagingDirectory) \
+  #                             --output-directory $(Build.ArtifactStagingDirectory)/reports/$PROJECT_NAME \
+  #                             $PROJECT_PATH
+  #           done
+  #       displayName: 'Generate code coverage reports'
+
+  #     - task: PublishCodeCoverageResults@1
+  #       inputs:
+  #         codeCoverageTool: 'Cobertura'
+  #         summaryFileLocation: '$(Build.ArtifactStagingDirectory)/reports/*/*.xml'
+  #       displayName: 'Publish code coverage'
+
+  # - job: 'IntegrationTest'
+  #   variables:
+  #     - template: ../variables/globals.yml
+
+  #   pool:
+  #     vmImage: '$(OSVmImage)'
+
+  #   steps:
+  #     - script: sudo xcode-select --switch /Applications/Xcode_$(XcodeVersion).app
+  #       displayName: 'Use Xcode $(XcodeVersion)'
+
+  #     - script: pod install
+  #       displayName: 'Install dependencies'
+
+  #     - script: |
+  #         set -o pipefail
+  #         xcodebuild build \
+  #                   -workspace AzureSDK.xcworkspace \
+  #                   -scheme examples \
+  #                   -sdk iphonesimulator \
+  #                   -configuration Debug | xcpretty -c
+  #       displayName: 'Build examples [iphonesimulator]'
+
+  # - job: 'SmokeTest'
+  #   strategy:
+  #     matrix:
+  #       # Build SDK libraries as frameworks, dynamically link to copies stored within the app bundle
+  #       frameworks:
+  #         PodsLinkage: frameworks
+
+  #       # Build SDK libraries as static libs (.a), statically link them into the app binary
+  #       # This is currently broken, probably because Calling is pre-built as a framework
+  #       # static:
+  #       #   PodsLinkage: static
+
+  #       # Build SDK libraries as frameworks, but then statically link them into the app binary
+  #       # Calling is still dynamically linked, probably because Calling is pre-built as a framework
+  #       staticframeworks:
+  #         PodsLinkage: staticframeworks
+
+  #   variables:
+  #     - template: ../variables/globals.yml
+
+  #   pool:
+  #     vmImage: '$(OSVmImage)'
+
+  #   steps:
+  #     - script: sudo xcode-select --switch /Applications/Xcode_$(XcodeVersion).app
+  #       displayName: 'Use Xcode $(XcodeVersion)'
+
+  #     - script: |
+  #         cd examples/AzureSDKSmokeTest
+  #         pod install
+  #       env:
+  #         IS_CI: True
+  #         PODSPEC_DIR: $(Build.Repository.LocalPath)
+  #         PODS_LINKAGE: $(PodsLinkage)
+  #       displayName: 'Install dependencies'
+  #     - script: |
+  #         set -o pipefail
+  #         cd examples/AzureSDKSmokeTest
+  #         xcodebuild build \
+  #                   -workspace AzureSDKSmokeTest.xcworkspace \
+  #                   -scheme AzureSDKSmokeTest \
+  #                   -sdk iphonesimulator \
+  #                   -configuration Debug | xcpretty -c
+  #       displayName: 'Build smoke test [iphonesimulator]'
+
+  # TODO: Remove after pipeline is working
+  - job: RemoveMe
 
     variables:
       - template: ../variables/globals.yml
@@ -106,145 +302,4 @@ jobs:
       vmImage: '$(OSVmImage)'
 
     steps:
-
-      - task: UsePythonVersion@0
-        displayName: 'Use Python 3.6'
-        inputs:
-          versionSpec: '3.6'
-
-      - script: sudo xcode-select --switch /Applications/Xcode_$(XcodeVersion).app
-        displayName: 'Use Xcode $(XcodeVersion)'
-
-      - template: ../../../common/pipelines/templates/steps/verify-links.yml
-        parameters:
-          Directory: ""
-          CheckLinkGuidance: $true
-
-      - script: |
-          pod lib lint --quick
-          pod spec lint --use-modular-headers
-        displayName: Lint Podspecs
-
-      - template: /eng/pipelines/templates/steps/verify-versions.yml
-
-      - script: |
-          brew install swiftlint
-          case "${{parameters.BuildScheme}}" in
-            all)
-              swiftlint lint --path . --quiet --reporter emoji
-              ;;
-            sdk|examples)
-              swiftlint lint --path ${{parameters.BuildScheme}} --quiet --reporter emoji
-              ;;
-            *)
-              swiftlint lint --path sdk/${{parameters.BuildScheme}} --quiet --reporter emoji
-              ;;
-          esac
-        displayName: 'Swiftlint sources'
-
-      - script: |
-          pip install setuptools wheel
-          pip install doc-warden==$(DocWardenVersion)
-          ward scan -d $(Build.SourcesDirectory) -c $(Build.SourcesDirectory)/eng/.docsettings.yml
-        displayName: 'Verify READMEs'
-
-      - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
-        # ComponentGovernance is currently unable to run on pull requests of public projects. Running on non-PR
-        # builds should be sufficient.
-        condition: and(succeededOrFailed(), ne(variables['Build.Reason'], 'PullRequest'))
-        displayName: 'Component detection'
-
-  - job: 'UnitTest'
-
-    variables:
-      - template: ../variables/globals.yml
-
-    pool:
-      vmImage: '$(OSVmImage)'
-
-    steps:
-      - script: sudo xcode-select --switch /Applications/Xcode_$(XcodeVersion).app
-        displayName: 'Use Xcode $(XcodeVersion)'
-
-      - script: gem install -N trainer slather -- --use-system-libraries
-        displayName: 'Install build tools'
-
-      - script: pod install
-        displayName: 'Install dependencies'
-
-      - script: |
-          xcrun simctl delete unavailable
-          set -o pipefail
-          xcodebuild -workspace AzureSDK.xcworkspace \
-                    -scheme ${{parameters.BuildScheme}} \
-                    -destination "platform=iOS Simulator,OS=$(SimulatorVersion),name=$(SimulatorDevice)" \
-                    -configuration Debug \
-                    -derivedDataPath $(Build.ArtifactStagingDirectory) \
-                    -enableCodeCoverage YES \
-                    test | xcpretty -c
-        displayName: 'Build and test libraries'
-
-      - script: trainer --path $(Build.ArtifactStagingDirectory) --fail_build false
-        env:
-          FASTLANE_OPT_OUT_USAGE: true
-        displayName: 'Convert unit test results'
-
-      - task: PublishTestResults@2
-        inputs:
-          searchFolder: '$(Build.ArtifactStagingDirectory)/Logs/Test'
-          testResultsFiles: '*.xml'
-          testRunTitle: 'Unit Tests - [Xcode $(XcodeVersion), iOS $(SimulatorVersion)]'
-        displayName: 'Publish unit test results'
-
-      - script: |
-          echo "Getting list of projects in scheme ${{parameters.BuildScheme}}"
-          xcodebuild -showBuildSettings \
-                    -workspace AzureSDK.xcworkspace \
-                    -scheme ${{parameters.BuildScheme}} \
-                    -configuration Debug \
-          | grep PROJECT_FILE_PATH \
-          | awk -F ' = ' '{print $NF}' \
-          | while read PROJECT_PATH; do
-              PROJECT_NAME=$(echo $PROJECT_PATH | awk -F/ '{print $NF}' | sed 's/.xcodeproj//')
-              echo "Generating reports for $PROJECT_NAME"
-              slather coverage -x \
-                              --workspace AzureSDK.xcworkspace \
-                              --scheme ${{parameters.BuildScheme}} \
-                              --configuration Debug \
-                              --binary-basename $PROJECT_NAME \
-                              --build-directory $(Build.ArtifactStagingDirectory) \
-                              --output-directory $(Build.ArtifactStagingDirectory)/reports/$PROJECT_NAME \
-                              $PROJECT_PATH
-            done
-        displayName: 'Generate code coverage reports'
-
-      - task: PublishCodeCoverageResults@1
-        inputs:
-          codeCoverageTool: 'Cobertura'
-          summaryFileLocation: '$(Build.ArtifactStagingDirectory)/reports/*/*.xml'
-        displayName: 'Publish code coverage'
-
-  - job: 'IntegrationTest'
-
-    variables:
-      - template: ../variables/globals.yml
-
-    pool:
-      vmImage: '$(OSVmImage)'
-
-    steps:
-      - script: sudo xcode-select --switch /Applications/Xcode_$(XcodeVersion).app
-        displayName: 'Use Xcode $(XcodeVersion)'
-
-      - script: pod install
-        displayName: 'Install dependencies'
-
-      - script: |
-          set -o pipefail
-          xcodebuild build \
-                    -workspace AzureSDK.xcworkspace \
-                    -scheme examples \
-                    -sdk iphonesimulator \
-                    -configuration Debug | xcpretty -c
-        displayName: 'Build examples [iphonesimulator]'
-
+      - script: "echo remove me later on!"
