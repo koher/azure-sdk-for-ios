@@ -32,15 +32,18 @@ import PackageDescription
 let package = Package(
     name: "AzureSDK",
     platforms: [
-        .macOS(.v10_15), .iOS(.v12), .tvOS(.v12)
+        .iOS(.v12),
     ],
     products: [
         .library(name: "AzureCore", targets: ["AzureCore"]),
         .library(name: "AzureCommunication", targets: ["AzureCommunication"]),
         .library(name: "AzureCommunicationChat", targets: ["AzureCommunicationChat"]),
+        .library(name: "AzureIdentity", targets: ["AzureIdentity"]),
+        .library(name: "AzureStorageBlob", targets: ["AzureStorageBlob"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/AliSoftware/OHHTTPStubs.git", from: "9.1.0")
+        .package(url: "https://github.com/AliSoftware/OHHTTPStubs.git", from: "9.1.0"),
+        .package(name: "MSAL", url: "https://github.com/AzureAD/microsoft-authentication-library-for-objc.git", from: "1.1.15"),
     ],
     targets: [
         // Build targets
@@ -63,6 +66,23 @@ let package = Package(
             dependencies: ["AzureCore", "AzureCommunication"],
             path: "sdk/communication/AzureCommunicationChat",
             exclude: ["Source/Supporting Files"],
+            sources: ["Source"]
+        ),
+        .target(
+            name: "AzureIdentity",
+            dependencies: ["AzureCore", "MSAL"],
+            path: "sdk/identity/AzureIdentity",
+            exclude: ["Source/Supporting Files"],
+            sources: ["Source"]
+        ),
+        .target(
+            name: "AzureStorageBlob",
+            dependencies: ["AzureCore", "AzureIdentity"],
+            path: "sdk/storage/AzureStorageBlob",
+            exclude: [
+                "Source/Supporting Files",
+                "Source/Data/AzureStorage.xcdatamodeld"
+            ],
             sources: ["Source"]
         ),
         // Test targets
